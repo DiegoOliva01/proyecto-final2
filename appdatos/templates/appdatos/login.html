@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> esta es la pagina de login  </h1>
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>formulario de ingreso</h1>
+<h1>{{ mensaje }}</h1>
+
+<form action="{% url 'login' %}" method="POST"> {% csrf_token %}
+
+
+    {{ form.as_p}}
+    <button type="submit"> Iniciar sesion</button>
+
+
+
+
+</form>
+
+{% endblock %}

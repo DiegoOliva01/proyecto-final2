@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> Esta es la pagina de registro  </h1>
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>formulario de registro</h1>
+<h1>{{ mensaje }}</h1>
+
+<form action="{% url 'register' %}" method="POST"> {% csrf_token %}
+
+
+    {{ form.as_p}}
+    <button type="submit"> Registrate</button>
+
+
+
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> mi pagina de resultados de busqueda </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>resultados busqueda </h1>
+{% if mensaje %}
+ <h2>{{ mensaje }}</h2>
+{% else %} 
+{% for i in vehiculo %}
+
+<h2> Marca:{{ i.marca }}</h2>
+<h2>Modelo:{{ i.modelo }}</h2>
+<h2>Año del vehiculo:{{ i.año_vehiculo }}</h2>
+<h2>Numero de patente:{{ i.patente }}</h2>
+<h2>Valor del vehiculo:{{ i.valor }}</h2>
+<h2>Titular del vehiculo:{{ i.dueño_vehiculo }}</h2>
+  
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

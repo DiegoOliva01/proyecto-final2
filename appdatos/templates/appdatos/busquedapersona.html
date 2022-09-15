@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> Pagina de busqueda de datos de una persona </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>mi pagina de busqueda de datos de una persona </h1>
+
+<form action="{% url 'buscarpersona' %}" method="GET"> {% csrf_token %}
+
+<p>Numero de DNI de la persona<input type="text" name="dni",id="dni"></p>
+
+<input type="submit" value="Buscar">
+
+</form>
+
+<h2>{{ mensaje  }}</h2>
+
+{% endblock %}

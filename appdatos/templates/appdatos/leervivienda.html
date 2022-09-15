@@ -1,0 +1,33 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block Viviendas %}
+
+
+{% endblock %}
+<h1 class ="mb-5"> Listado de viviendas registradas a nombre de {{ usuario }} </h1>
+
+{% block Viviendas %}
+
+{% if mensaje %}
+<h2>{{ mensaje }}</h2>
+
+{% else %}
+
+<h1>Lista de viviendas</h1>
+
+{% for casita in casa %}
+
+<h2>{{ casita.largo_terreno }},{{ casita.ancho_terreno }},{{ casita.largo_casa }},{{ casita.ancho_casa }},{{ casita.descripcion }},{{ casita.titular_terreno }},{{ casita.cant_personas_en_casa }}</h2>
+
+<button>
+    <a class="btn btn-success" href="{% url 'eliminavivienda' casita.id %}">Eliminar  </a>
+    <a class="btn btn-success" href="{% url 'editarvivienda' casita.id %}">Editar  </a>
+</button>
+
+{% endfor %}
+
+{% endif %}
+<a class="btn btn-success" href="{% url 'formulariovivienda' %}">Agregar vehiculo </a>
+{% endblock %}

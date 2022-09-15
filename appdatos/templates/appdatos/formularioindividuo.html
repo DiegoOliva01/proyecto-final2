@@ -1,0 +1,25 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> mi_pagina_de_formulario_de_individuo </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<form action="{% url 'formularioindividuo' %}" method="POST"> {% csrf_token %}
+
+<table>
+    {{ formulario.as_table }}
+</table>
+
+<input type="submit" value="Enviar">
+
+</form>
+
+{% endblock %}

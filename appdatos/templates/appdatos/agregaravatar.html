@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block Cambiar avatar %}
+
+<h1 class ="mb-5"> Agregando avatar de {{ usuario }} </h1>
+
+{% endblock %}
+
+{% block Agregar avatar %}
+
+<h1>Agregar avatar</h1>
+
+
+<form action="{% url 'agregaravatar' %}" method="POST" enctype="multipart/form-data">  {% csrf_token %}
+
+
+    {{ form.as_p}}
+    <button type="submit"> Agregar avatar</button>
+
+
+
+
+</form>
+
+{% endblock %}

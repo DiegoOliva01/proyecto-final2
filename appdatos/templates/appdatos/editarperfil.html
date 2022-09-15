@@ -1,0 +1,28 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block Editar el perfil %}
+
+<h1 class ="mb-5"> Edicion de usuario de {{ usuario }} </h1>
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>Edicion de perfil </h1>
+<h1>{{ mensaje }}</h1>
+
+<form action="{% url 'editarperfil' %}" method="POST"> {% csrf_token %}
+
+
+    {{ formulario.as_p}}
+
+    <button type="submit"> Guardar cambios</button>
+
+
+
+
+</form>
+
+{% endblock %}

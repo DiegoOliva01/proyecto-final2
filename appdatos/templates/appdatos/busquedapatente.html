@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> mi_pagina_de_busqueda_de_vehiculos </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>mi pagina de busqueda de vehiculos por patente </h1>
+
+<form action="{% url 'buscar' %}" method="GET"> {% csrf_token %}
+
+<p>Numero de patente del vehiculo<input type="text" name="patente",id="patente"></p>
+
+<input type="submit" value="Buscar">
+
+</form>
+
+<h2>{{ mensaje  }}</h2>
+
+{% endblock %}

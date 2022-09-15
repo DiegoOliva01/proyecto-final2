@@ -1,0 +1,35 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> mi pagina de resultados de busqueda </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>resultados busqueda </h1>
+{% if mensaje %}
+ <h2>{{ mensaje }}</h2>
+{% else %} 
+{% for i in persona %}
+
+<h2> Nombre:{{ i.nombre }}</h2>
+<h2>Apellido:{{ i.apellido }}</h2>
+<h2>Edad:{{ i.edad }}</h2>
+<h2>DNI:{{ i.dni }}</h2>
+<h2>Hijos:{{ i.hijos }}</h2>
+<h2>Trabajo:{{ i.trabajo }}</h2>
+<h2>Numero de telefono:{{ i.num_telefono }}</h2>
+<h2>Estado civil:{{ i.estado_civil }}</h2>
+  
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}
