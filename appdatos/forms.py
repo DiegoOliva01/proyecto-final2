@@ -70,4 +70,14 @@ class UserEditForm(UserCreationForm):
         help_texts={k:"" for k in fields}
 
 class AvatarForm(forms.Form):
-    iamgen=forms.ImageField(label="imagen")                      
+    imagen=forms.ImageField(label="imagen")   
+
+
+class FormularioMensage(forms.Form):
+    mensaje=forms.CharField(widget=forms.Textarea(attrs={
+        #el attrs me permite definir atributos dentro de la clase 
+
+        "class":"formulario_ms",
+        "placeholder":"escribe tu mensaje"
+
+    }))                       

@@ -1,0 +1,62 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> Canal de mensaje </h1>
+
+
+
+{% endblock %} 
+
+{% block contenido_que_cambia %}
+{% if mensaje %}
+<h2>{{ mensaje }}</h2>
+
+{% else %}
+
+{% for mensaje in objects.canalmensaje_set.all %}
+ {% if request.user == mensaje.usuario %}
+ <p>
+    {{mensaje.texto}}
+    <span>
+
+        Lo enviaste tu
+    </span>
+   
+ </p>
+
+ {% else %}
+  <p>
+     {{mensaje.texto}}
+      <span>
+        {{mensaje.usuario}}
+        
+      </span>
+  </p>
+
+  {% endif%}
+
+{% endfor %}
+
+<h1>Usuario del canal</h1>
+
+{% for usuarios in objects.canalusuario_set.all %}
+
+{{usuarios.usuario}}
+
+{% endfor %}
+
+<form action="{{request.path}}", method="POST">{% csrf_token %}
+
+
+    {{form.as_p}}
+    <button type="submit">
+      Enviar
+    </button>
+</form>
+
+
+
+{% endblock %} 

@@ -22,8 +22,8 @@
 <h2>{{ auto.modelo }},{{ auto.marca }},{{ auto.patente }},{{ auto.patente }},{{ auto.año_vehiculo }},{{ auto.valor }},{{ auto.dueño_vehiculo }},{{ auto.descripcion }},</h2>
 
 <button>
-    <a class="btn btn-success" href="{% url 'eliminarvehiculo' auto.id %}">Eliminar  </a>
-    <a class="btn btn-success" href="{% url 'editarvehiculo' auto.id %}">Editar  </a>
+    <a href="{% url 'eliminarvehiculo' auto.id %}">Eliminar  </a>
+    <a href="{% url 'editarvehiculo' auto.id %}">Editar  </a>
 </button>
 
 {% endfor %}

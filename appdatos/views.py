@@ -1,13 +1,20 @@
 from http.client import HTTPResponse
+from multiprocessing import context
+from django.http import HttpResponse
 from django.shortcuts import render
 from appdatos import *
 from appdatos.models import Persona,Vehiculo,Vivienda,Avatar
-from appdatos.forms import FormularioIndividuo,FormularioVehiculo,FormularioVivienda,UserRegisterForm,UserEditForm,AvatarForm
+from appdatos.forms import FormularioIndividuo,FormularioVehiculo,FormularioVivienda,UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+
+
 # Create your views here.
+
 @login_required
 def inicio(request):
     return render(request,"appdatos/inicio.html")
@@ -132,11 +139,11 @@ def buscarpersona(request):
 
 
 def leervehiculo(request):
-    vehiculo=Vehiculo.objects.all(Vehiculo.dueño_vehiculo==request.username)
+    vehiculo=Vehiculo.objects.all()
     return render(request, "appdatos/leervehiculo.html", {"vehiculo":vehiculo}) 
 
 def leervivienda(request):
-    casa=Vivienda.objects.all(Vivienda.titular_terreno==request.username)
+    casa=Vivienda.objects.all()
     return render(request, "appdatos/leervivienda.html", {"casa":casa}) 
     
 
@@ -179,6 +186,22 @@ def editarvivienda(request,id):
         miformulario=FormularioVehiculo(initial={"largo_terreno":casita.largo_terreno,"ancho_terreno":casita.ancho_terreno,"largo_casa":casita.largo_casa,"ancho_casa":casita.ancho_casa,"titular_terreno":casita.titular_terreno,"cant_personas_en_casa":casita.cant_personas_en_casa,"descripcion":casita.descripcion})
         return render(request, "appdatos/editarvivienda.html", {"formulario":miformulario,"Direccion de la vivienda":casita.direccion,"id":casita.id} )
 
+@login_required
+def editarperfil(request):
+    usuario=request.user     
+    if request.method=="POST":
+       form=UserEditForm(request.POST,instance=usuario)
+       if form.is_valid():
+         usuario.first_name=form.cleaned_data["first_name"]
+         usuario.last_name=form.cleaned_data["last_name"]
+         usuario.email=form.cleaned_data["email"]
+         usuario.password1=form.cleaned_data["password1"]
+         usuario.password2=form.cleaned_data["password2"]
+         usuario.save()
+         return render(request,"appdatos/inicio.html",{"mensaje" :f"perfi de {usuario} editado"})
+    else:
+        form=UserEditForm(instance=usuario)     
+    return render(request,"appdatos/editarperfil.html",{"formulario":form ,"usuario":usuario})
 
 
 def eliminarvehiculo(request,id):
@@ -194,9 +217,9 @@ def eliminarvehiculo(request,id):
     return render(request, "appdatos/leerestudiante.html", {"estudiantes":estudiantes})"""   
 
 
-def login(request):
+def login_request(request):
     if request.method=="POST":
-       form=AuthenticationForm(request, data=request.POST)
+       form=AuthenticationForm(request,data=request.POST)
        if form.is_valid():
           usu=request.POST["username"]
           clave=request.POST["password"]
@@ -209,8 +232,8 @@ def login(request):
        else:
             return render(request,"appdatos/login.html",{"form" :form, "mensaje" : "Formulario invalido"})
     else:
-     form=AuthenticationForm()
-     return render(request,"appdatos/login.html",{"form" :form})
+         form=AuthenticationForm()
+         return render(request,"appdatos/login.html",{"form" :form})
 
 
 
@@ -226,15 +249,15 @@ def register(request):
          form.save()
          return render(request,"appdatos/inicio.html",{"mensaje":f"usuario {username} creado"})
     else:
-     form=UserRegisterForm()
-     return render(request,"appdatos/register.html",{"form" :form})
+        form=UserRegisterForm()
+    return render(request,"appdatos/register.html",{"form" :form})
 
 """diego012345,user=blanky"""
 @login_required
 def editarperfil(request):
     usuario=request.user     
     if request.method=="POST":
-       form=UserEditForm(request.POST,instance=usuario)
+       form=UserEditForm(request.POST)
        if form.is_valid():
          usuario.first_name=form.cleaned_data["first_name"]
          usuario.last_name=form.cleaned_data["last_name"]
@@ -253,113 +276,23 @@ def obteneravatar(request):
         imagen=lista[0].imagen.url
     else:
         imagen=None 
+    return imagen    
 
 def agregaravatar(request):
     if request.method=="POST":
         formulario=AvatarForm(request.POST,request.FILES)
         if formulario.is_valid():
             avatarviejo=Avatar.objects.get(user=request.user)
-            if(avatarviejo.imagen):
+            if(len(avatarviejo)>0):
                 avatarviejo.delete()
-        avatar=Avatar(user=request.user,imagen=formulario.cleaned_data["imagen"])   
-        avatar.save()
-        return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente"})     
+            avatar=Avatar(user=request.user,imagen=formulario.cleaned_data["imagen"])   
+            avatar.save()
+            return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente","imagen":obteneravatar(request)})     
 
     else:
         formulario=AvatarForm()
     return render(request,"appdatos/agregaravatar.html",{"form":formulario ,"usuario":request.user,"imagen":obteneravatar(request)})     
-    
-
-
-""" <form action="{% url 'inicio' %}" method="POST"> {% csrf_token %}
-   
-    <p>Nombre: <input type="text",name="nombre"></p>
-    <p>Apellido: <input type="text",name="apellido"></p>
-    <p>DNI: <input type="number",name="dni"></p>
-    <p>Edad: <input type="number",name="edad"></p>
-    <p>Trabajo: <input type="text",name="trabajo"></p>
-    <p>Hijos: <input type="number",name="hijos"></p>
-    <p>Estado civil: <input type="text",name="estado_civil"></p>
-    <p>Numero de telefono: <input type="number",name="num_telefono"></p>
-
-    <input type="submit" value="Enviar">
 
 
 
- </form>
- <h2>{{ mensaje }}</h2>"""
 
-"""Hola Equipo! Gracias por su entrega!  
-
-
-
-A continuación les detallo la devolución de este desafío haciendo foco en los requerimientos del mismo:
-
-
-
-Respecto a la idea del proyecto: Vería la forma de contextualizar mejor su idea para el Proyecto Final. 
-No es obligatorio pero sería bueno que el proyecto apunte a algún objetivo concreto
-además de cumplir con los requerimientos mínimos. 
-
-
-
-Colaboración en GitHub: Es conveniente que todos los integrantes del 
-equipo aparezcan como colaboradores del repositorio. 
-Lo ideal sería que cada quien hiciera sus aportes comiteando sus cambios para que así 
-quede un registro claro del trabajo realizado por cada uno de Uds. Esto es lo más óptimo por lejos,
-ya que no hay mejor forma de dejar fehacientemente claro el aporte de cada integrante. 
-Si esto resulta muy complicado debido a la dificultad del manejo de Git/GitHub es conveniente que 
-en el readme quede detallado el trabajo que realizó cada uno.
-
-
-
-Modelos en models.py: Perfecto! Han generado los tres modelos requeridos como mínimo para esta entrega.
-
-
-
-Direccionamiento entre páginas: Tengan en cuenta que cuando se levante el 
-servidor lo primero que debe aparecer es la página de inicio, para ello deberan configurar 
-el urls.py para que si el path es ‘/’ lleve al home o index. 
-
-Por otra parte, recuerden colocar accesos visibles desde la interfaz a
-cada sección de la app para que el usuario no tenga necesidad de ingresar
-las urls en la barra de direcciones para acceder a por ej, un formulario de búsqueda.
-
-
-
-Manejo de plantillas: Muy bien! Hicieron uso de herencias en distintos HTML con el lenguaje de plantillas de Django. 
-
-Como oportunidad de mejora, les sugiero ubicar la carpeta 
-‘templates’ en la raíz del proyecto. Esto resulta más organizado, 
-ya que lo habitual es que un proyecto tenga más de una aplicación y resulta poco 
-práctico tener una carpeta ‘templates’ en cada una de ellas.
-
-Lo mismo recomiendo hacer con la carpeta ‘static’. 
-
-
-
-Formulario de inserción de datos: Perfecto! Todos sus formularios 
-generan exitosamente registros en la BD. 
-Como oportunidad de mejora, sugiero que cuando uno crea algún nuevo registro, 
-la app redireccione a un sitio que muestre el catálogo de todos los registros existentes.
-Por ejemplo, que al crear un nuevo vehículo, redireccione a un catálogo o tabla de vehículos.
-
-
-
-Formulario de búsqueda: Muy bien! El buscador de personas funciona.
-
-Como punto a mejorar, resulta necesario que el sitio permita consultar las 
-demás tablas de la DB y permita consultar con más de un criterio de búsqueda. 
-Es decir, tomando el caso de los vehículos, que permita elegir otro criterio de búsqueda aparte de la patente.
-
-
-
-Como última recomendación, sugiero estar muy atentos a los detalles que brinde el 
-profesor acerca de sus criterios de evaluación sobre el Proyecto Final, 
-ya que será él quien lo va a corregir. Asimismo, tengan muy en cuenta los requerimientos 
-sobre el PF que se detallan aquí https://docs.google.com/document/d/186-dBXzGU7GgG9T-q5hkVD8Bu4VZ7kKn2E6ls7e5JHM/edit
-
-
-
-Sin más, les deseo muchos éxitos y recuerden que pueden consultarme ante cualquier 
-inconveniente que se presente durante el desarrollo del proyecto. El desafío está APROBADO. Saludos!"""
