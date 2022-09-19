@@ -26,11 +26,12 @@ urlpatterns = [
     path("editarvehiculo/<id>", views.editarvehiculo,name="editarvehiculo"),
     path("editarvivienda/<id>", views.editarvivienda,name="editarvivienda"),
 
-    path("login/", views.login_request,name="login"), 
+    path('login/', login_request, name='login'), 
     path("register/", views.register,name="register"), 
     path("logout/", LogoutView.as_view(template_name="appdatos/logout.html"), name="logout"),
     path("editarperfil/", views.editarperfil, name="editarperfil"),
     path("agregaravatar/", views.agregaravatar, name="agregaravatar"), 
     
+    path("enviar_mensaje/",views.enviar_mensaje,name="enviar_mensaje"),
  
 ]

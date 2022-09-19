@@ -1,3 +1,4 @@
+from datetime import datetime
 from django import forms
 from dataclasses import fields
 from django.contrib.auth.forms import UserCreationForm
@@ -74,10 +75,8 @@ class AvatarForm(forms.Form):
 
 
 class FormularioMensage(forms.Form):
-    mensaje=forms.CharField(widget=forms.Textarea(attrs={
-        #el attrs me permite definir atributos dentro de la clase 
-
-        "class":"formulario_ms",
-        "placeholder":"escribe tu mensaje"
-
-    }))                       
+    emisor=forms.CharField(max_length=20)
+    receptor=forms.CharField(max_length=20)
+    texto=forms.CharField(max_length=500)
+    fecha=forms.DateTimeField()
+                  

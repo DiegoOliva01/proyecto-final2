@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from genericpath import exists
 from django.db import models
 from django.contrib.auth.models import User
@@ -49,3 +50,12 @@ class Vivienda(models.Model):
 class Avatar(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     imagen=models.ImageField(upload_to="avatares",null=True,blank=True)        
+
+
+class Msg (models.Model):
+    emisor=models.CharField(max_length=20)
+    receptor=models.CharField(max_length=20)
+    texto=models.CharField(max_length=500)
+    fecha=models.DateTimeField()
+    def __str__(self):
+        return self.fecha+""+self.emisor+""+self.receptor

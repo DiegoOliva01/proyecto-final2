@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block Cambiar avatar %}
+{% block titulo_de_la_pagina %}
 
 <h1 class ="mb-5"> Agregando avatar de {{ usuario }} </h1>
 
@@ -16,7 +16,7 @@
 <form action="{% url 'agregaravatar' %}" method="POST" enctype="multipart/form-data">  {% csrf_token %}
 
 
-    {{ form.as_p}}
+    {{ form.as_p }}
     <button type="submit"> Agregar avatar</button>
 
 

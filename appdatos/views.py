@@ -3,7 +3,7 @@ from multiprocessing import context
 from django.http import HttpResponse
 from django.shortcuts import render
 from appdatos import *
-from appdatos.models import Persona,Vehiculo,Vivienda,Avatar
+from appdatos.models import Msg, Persona,Vehiculo,Vivienda,Avatar
 from appdatos.forms import FormularioIndividuo,FormularioVehiculo,FormularioVivienda,UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
@@ -17,8 +17,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 @login_required
 def inicio(request):
-    return render(request,"appdatos/inicio.html")
-
+    
+   return render(request,"appdatos/inicio.html")
+  
 def individuo(request):
     return render(request,"appdatos/individuo.html")
 
@@ -265,10 +266,10 @@ def editarperfil(request):
          usuario.password1=form.cleaned_data["password1"]
          usuario.password2=form.cleaned_data["password2"]
          usuario.save()
-         return render(request,"appcoder/inicio.html",{"mensaje" :f"perfi de {usuario} editado"})
+         return render(request,"appdatos/inicio.html",{"mensaje" :f"perfi de {usuario} editado"})
     else:
         form=UserEditForm(instance=usuario)     
-    return render(request,"appcoder/editarperfil.html",{"formulario":form ,"usuario":usuario})
+    return render(request,"appdatos/editarperfil.html",{"formulario":form ,"usuario":usuario})
 
 def obteneravatar(request):
     lista=Avatar.objects.filter(User=request.user)
@@ -280,18 +281,43 @@ def obteneravatar(request):
 
 def agregaravatar(request):
     if request.method=="POST":
-        formulario=AvatarForm(request.POST,request.FILES)
-        if formulario.is_valid():
+        form=AvatarForm(request.POST,request.FILES)
+        if form.is_valid():
             avatarviejo=Avatar.objects.get(user=request.user)
             if(len(avatarviejo)>0):
                 avatarviejo.delete()
-            avatar=Avatar(user=request.user,imagen=formulario.cleaned_data["imagen"])   
-            avatar.save()
-            return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente","imagen":obteneravatar(request)})     
+        avatar=Avatar(user=request.user,imagen=form.cleaned_data["imagen"])   
+        avatar.save()
+        return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente","imagen":obteneravatar(request)})     
 
     else:
-        formulario=AvatarForm()
-    return render(request,"appdatos/agregaravatar.html",{"form":formulario ,"usuario":request.user,"imagen":obteneravatar(request)})     
+        form=AvatarForm()
+    return render(request,"appdatos/agregaravatar.html",{"form":form ,"usuario":request.user,"imagen":obteneravatar(request)})     
+
+
+def enviar_mensaje(request,user):
+    if request.method=="POST":
+       form=FormularioMensage(request.POST)
+       if form.is_valid():
+        info=form.cleaned_data
+        msg=info.get("mensaje")
+        emi=info.get("emisor")
+        recep=info.get("receptor")
+        fecha=info.get("fecha")
+        mensajes=Msg(mensaje=msg,emisor=emi,receptor=recep,fecha=fecha)
+        mensajes.save()
+        return render(request,"appdatos/inicio.html", {"mensaje": "mensaje enviado"})
+       else:   
+           return render(request,"appdatos/inicio.html", {"mensaje": "Error, no se pudo enviar el mensaje"} )    
+    else:
+        form=FormularioMensage()
+        return render(request,"appdatos/formulariomensage.html", {"form":form} ) 
+
+
+
+
+
+
 
 
 
