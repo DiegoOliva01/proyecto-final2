@@ -11,25 +11,7 @@ urlpatterns = [
     path("blog/",blog,name="blog"),
     path('categoria/<int:categoria_id>/',categoria, name="categoria"),
     path("<slug:slug>/",detalle_post,name="detalle_post"),
-
-
-    path("individuo/",views.individuo,name="individuo"),
-    path("vehiculo/",views.vehiculo,name="vehiculo"),
-    path("vivienda/",views.vivienda,name="vivienda"),
     
-
-
-    path("formulario_individuo/",views.formulario_individuo,name="formularioindividuo"),
-    path("formulario_vehiculo/",views.formulario_vehiculo,name="formulariovehiculo"),
-    path("formulario_vivienda/",views.formulario_vivienda,name="formulariovivienda"),
-    path("busquedapatente/",views.busquedapatente,name="busquedapatente"),
-    path("buscar/",views.buscar,name="buscar"),
-    path("busquedapersona/",views.busquedapersona,name="busquedapersona"),
-    path("buscarpersona/",views.buscarpersona,name="buscarpersona"),
-
-    path("editarvehiculo/<id>", views.editarvehiculo,name="editarvehiculo"),
-    path("editarvivienda/<id>", views.editarvivienda,name="editarvivienda"),
-
     path('login/', login_request, name='login'), 
     path("register/", views.register,name="register"), 
     path("logout/", LogoutView.as_view(template_name="appdatos/logout.html"), name="logout"),

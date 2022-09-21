@@ -23,22 +23,19 @@
     
 
     <h2>La categoria es {{post.categoria}}</h2>                  
-    <h2>Titulo:{{post.titulo}},{{post.publicado}}</h1>  
+    <h1>{{post.titulo}}</h1> 
 
-    <img src="{{post.imagen}}" alt="">
-                                 
-    <h2>{{post.contenido}}</h2> 
-                        
-    <h3>Publicado por {{post.autor}}</h3> 
-
-    <form method = "POST" enctype="multipart/form-data">  {% csrf_token %} 
+<form method = "POST" enctype="multipart/form-data">  {% csrf_token %} 
    
-        <img src="{{post.imagen}}" alt=""> 
-        
-    </form>  
-                                
-                           
-           
+    <img src="{{post.imagen}}" alt=""> 
+    
+</form>  
+
+                             
+<h2>{{post.contenido}}</h2> 
+                    
+
+<h2>Publicado el {{post.publicado}},por {{post.autor}}</h2>    
     {% endfor %}
 
 
