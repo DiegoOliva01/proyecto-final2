@@ -10,7 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,TemplateView
-
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -30,9 +30,9 @@ def categoria(request, categoria_id):
     categorias =get_object_or_404(Categoria,id=categoria_id)
     return render(request, "appdatos/categoria.html", {'categoria':categorias, 'posteos':posteos})
 
-def detalle_post(request,slug):
-    post=Posteo.objects.get(slug=slug)
-    return render(request,"appdatos/post.html",{"posteos":post})    
+#def detalle_post(request,slug):
+   # post=Posteo.objects.get(slug=slug)
+   # return render(request,"appdatos/post.html",{"posteos":post})    
   
 
 @login_required
@@ -92,7 +92,7 @@ def register(request):
 
 
 def obteneravatar(request):
-    lista=Avatar.objects.filter(User=request.user)
+    lista=Avatar.objects.filter(user=request.user)
     if len(lista)!=0:
         imagen=lista[0].imagen.url
     else:
@@ -104,7 +104,7 @@ def agregaravatar(request):
         form=AvatarForm(request.POST,request.FILES)
         if form.is_valid():
             avatarviejo=Avatar.objects.get(user=request.user)
-            if(len(avatarviejo)>0):
+            if len(avatarviejo)!=0:
                 avatarviejo.delete()
         avatar=Avatar(user=request.user,imagen=form.cleaned_data["imagen"])   
         avatar.save()

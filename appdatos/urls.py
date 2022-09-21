@@ -10,7 +10,7 @@ urlpatterns = [
     path("",views.inicio,name="inicio"),
     path("blog/",blog,name="blog"),
     path('categoria/<int:categoria_id>/',categoria, name="categoria"),
-    path("<slug:slug>/",detalle_post,name="detalle_post"),
+    #path("<slug:slug>/",detalle_post,name="detalle_post"),
     
     path('login/', login_request, name='login'), 
     path("register/", views.register,name="register"), 
