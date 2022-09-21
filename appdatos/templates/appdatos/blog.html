@@ -1,0 +1,37 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5">Pagina de inicio del blog</h1>
+{{categoria}}
+
+
+
+{% endblock %} 
+
+{% block contenido_que_cambia %}
+  
+{% for post in posteos %}
+    
+
+                        
+<h1>{{post.titulo}},{{post.publicado}}</h1> 
+<form method = "POST" enctype="multipart/form-data">  {% csrf_token %} 
+   
+    <img src="{{post.imagen}}" alt=""> 
+    
+</form>  
+
+                             
+<h2>{{post.contenido}}</h2> 
+                    
+<h3>Publicado por {{post.autor}}</h3> 
+                            
+                       
+       
+{% endfor %}
+
+
+{% endblock %} 

@@ -1,15 +1,15 @@
 from http.client import HTTPResponse
 from multiprocessing import context
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from appdatos import *
-from appdatos.models import Msg, Persona,Vehiculo,Vivienda,Avatar
+from appdatos.models import Categoria, Msg, Persona,Vehiculo,Vivienda,Avatar,Posteo,Categoria,Comentarios
 from appdatos.forms import FormularioIndividuo,FormularioVehiculo,FormularioVivienda,UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,TemplateView
 
 
 
@@ -18,7 +18,21 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 @login_required
 def inicio(request):
     
-   return render(request,"appdatos/inicio.html")
+
+    return render(request,"appdatos/inicio.html")
+
+def blog(request):
+    posteos =Posteo.objects.all()
+    return render(request, "appdatos/blog.html", {'posteos':posteos})
+
+def categoria(request, categoria_id):
+    posteos =Posteo.objects.all()
+    categorias =get_object_or_404(Categoria,id=categoria_id)
+    return render(request, "appdatos/categoria.html", {'categoria':categorias, 'posteos':posteos})
+
+def detalle_post(request,slug):
+    post=Posteo.objects.get(slug=slug)
+    return render(request,"appdatos/post.html",{"posteos":post})    
   
 def individuo(request):
     return render(request,"appdatos/individuo.html")

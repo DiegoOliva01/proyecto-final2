@@ -1,0 +1,45 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5">Pagina de categorias</h1>
+
+   
+    {% for categorias in posteos.categorias.all %}
+        <a href="{% url 'categoria' categorias.id %}" class="link">
+            {{categoria.nombre}}</a>
+          
+    {% endfor %}
+
+    
+
+
+{% endblock %} 
+
+{% block contenido_que_cambia %}
+  {% for post in posteos %}
+    
+
+    <h2>La categoria es {{post.categoria}}</h2>                  
+    <h2>Titulo:{{post.titulo}},{{post.publicado}}</h1>  
+
+    <img src="{{post.imagen}}" alt="">
+                                 
+    <h2>{{post.contenido}}</h2> 
+                        
+    <h3>Publicado por {{post.autor}}</h3> 
+
+    <form method = "POST" enctype="multipart/form-data">  {% csrf_token %} 
+   
+        <img src="{{post.imagen}}" alt=""> 
+        
+    </form>  
+                                
+                           
+           
+    {% endfor %}
+
+
+{% endblock %} 
