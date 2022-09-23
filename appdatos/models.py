@@ -16,16 +16,19 @@ from django.conf import settings
 # Create your models here.
 class Avatar(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    imagen=models.ImageField(upload_to="avatares",null=True,blank=True)        
+    imagen=models.ImageField(upload_to="avatares",null=True,blank=True)   
+
 
 
 class Msg (models.Model):
-    emisor=models.CharField(max_length=20)
-    receptor=models.CharField(max_length=20)
+    emisor=models.ForeignKey(User,on_delete=models.CASCADE,related_name="emisor")
+    receptor=models.ForeignKey(User,on_delete=models.CASCADE)
     texto=models.CharField(max_length=500)
-    fecha=models.DateTimeField()
-    def __str__(self):
-        return self.fecha+""+self.emisor+""+self.receptor
+    fecha=models.DateTimeField(default=timezone.now)
+    def __str__(self): 
+        return str(self.fecha)+" "+str(self.emisor)+" "+str(self.receptor)
+
+
 
 class Categoria(models.Model):
     nombre=models.CharField(max_length=100)  
@@ -42,7 +45,7 @@ class Posteo(models.Model):
 
     categoria=models.ForeignKey(Categoria,on_delete=models.PROTECT,default=1) #el protect me permite que si se borra una categoria no se eliminen los posteos que encuentren en esa categoria
     titulo=models.CharField(max_length=200)
-    estado=models.CharField(max_length=200,choices=Options,default="borrador")
+    estado=models.CharField(max_length=200,choices=Options,default="borrador")#el choise me permite elegir entre las opciones que le indique
     autor=models.ForeignKey(User,on_delete=models.CASCADE,related_name="blog_posts")
     imagen = models.ImageField(upload_to="avatares", null=True, blank=True,verbose_name="Imagen")
     contenido=models.TextField()

@@ -4,8 +4,14 @@ from .models import *
 
 # Register your models here.
 
+#blanky,diego012345
+#blankito,diego012345
 admin.site.register(Avatar)
-admin.site.register(Msg)
+
+
+@admin.register(Msg)
+class AutorAdmin(admin.ModelAdmin):
+    list_display=("fecha","emisor","receptor")
 
 @admin.register(Posteo)
 class AutorAdmin(admin.ModelAdmin):

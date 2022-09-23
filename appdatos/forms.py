@@ -1,8 +1,10 @@
 from datetime import datetime
+from email.policy import default
 from django import forms
 from dataclasses import fields
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils import timezone 
 
 
 class UserRegisterForm(UserCreationForm):
@@ -36,8 +38,9 @@ class AvatarForm(forms.Form):
 
 
 class FormularioMensage(forms.Form):
-    emisor=forms.CharField(max_length=20)
-    receptor=forms.CharField(max_length=20)
-    texto=forms.CharField(max_length=500)
+    emisor=forms.CharField(label="Emisor")
+    receptor=forms.CharField(label="Nombre del usuario ")
+    texto=forms.CharField(label="Mensaje")
     fecha=forms.DateTimeField()
+    
                   

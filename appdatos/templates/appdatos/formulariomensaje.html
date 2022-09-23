@@ -12,7 +12,7 @@
 
 {% block contenido_que_cambia %}
 
-<form action="{% url 'formulariomensaje' %}" method="POST"> {% csrf_token %}
+<form action="{% url 'enviar_mensaje' %}" method="POST"> {% csrf_token %}
 
 <table>
     {{ form.as_table }}

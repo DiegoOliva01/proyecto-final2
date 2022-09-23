@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+
+{% block titulo_de_pagina %}
+<h1 class="mb-5">Busqueda de mensaje</h1>
+{% endblock %}
+
+
+{% block contenido_que_cambia %}
+
+<h1>buscamos un mensaje que enviaste a un usuario de la plataforma</h1>
+
+
+<form action="{% url 'buzon' %}" method="GET"> {% csrf_token %}
+
+<p>Nombre del usuario:<input type="text" name="receptor"></p>
+
+
+<input type="submit", value="Buscar">
+
+</form>
+
+<h2 >{{ mensaje }}</h2>
+
+{% endblock %}

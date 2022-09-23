@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 def inicio(request):
     
 
-    return render(request,"appdatos/inicio.html")
+    return render(request,"appdatos/inicio.html",{"imagen":obteneravatar(request)})
 
 def blog(request):
     posteos =Posteo.objects.all()
@@ -88,23 +88,17 @@ def register(request):
         form=UserRegisterForm()
     return render(request,"appdatos/register.html",{"form" :form})
 
-"""diego012345,user=blanky"""
+"""blanky012345,user=diego03"""
 
 
-def obteneravatar(request):
-    lista=Avatar.objects.filter(user=request.user)
-    if len(lista)!=0:
-        imagen=lista[0].imagen.url
-    else:
-        imagen=None 
-    return imagen    
+  
 
 def agregaravatar(request):
     if request.method=="POST":
         form=AvatarForm(request.POST,request.FILES)
         if form.is_valid():
-            avatarviejo=Avatar.objects.get(user=request.user)
-            if len(avatarviejo)!=0:
+            avatarviejo=Avatar.objects.filter(user=request.user)
+            if (len(avatarviejo))>0:
                 avatarviejo.delete()
         avatar=Avatar(user=request.user,imagen=form.cleaned_data["imagen"])   
         avatar.save()
@@ -114,8 +108,15 @@ def agregaravatar(request):
         form=AvatarForm()
     return render(request,"appdatos/agregaravatar.html",{"form":form ,"usuario":request.user,"imagen":obteneravatar(request)})     
 
+def obteneravatar(request):
+    lista=Avatar.objects.filter(user=request.user)
+    if len(lista)!=0:
+        imagen=lista[0].imagen.url
+    else:
+        imagen=None 
+    return imagen  
 
-def enviar_mensaje(request,user):
+def enviar_mensaje(request):
     if request.method=="POST":
        form=FormularioMensage(request.POST)
        if form.is_valid():
@@ -131,13 +132,30 @@ def enviar_mensaje(request,user):
            return render(request,"appdatos/inicio.html", {"mensaje": "Error, no se pudo enviar el mensaje"} )    
     else:
         form=FormularioMensage()
-        return render(request,"appdatos/formulariomensage.html", {"form":form} ) 
+        return render(request,"appdatos/formulariomensaje.html", {"form":form} ) 
+
+
+def busquedamensaje(request):
+    return render(request, "appdatos/busquedamensaje.html")
 
 
 
+@login_required
+def buzon(request):
+    if request.GET["receptor"]:
+        msg=request.GET["receptor"]
+        mensaje=Msg.objects.filter(receptor=msg)
+        if len(mensaje)!=0:
+            return render(request, "appdatos/resultadobusqueda.html", {"mensajes":mensaje})
+        else:
+            return render(request, "appdatos/resultadobusqueda.html", {"mensajes": "No tiene mensajes en su buzon"})
+    else:
+        return render(request, "appdatos/busquedamensaje.html", {"mensaje": f"No existe el usuario {Msg.receptor}"})
 
 
 
+def vermas(request):
+ return render( request,"appdatos/vermas.html")
 
 
 

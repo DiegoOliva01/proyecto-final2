@@ -23,18 +23,23 @@
         <!-- Navigation-->
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
+                
                 <a class="navbar-brand" href="{% url 'inicio' %}">Inicio</a>
-                <a class="navbar-brand" href="{% url 'blog' %}">Blogs</a>
+                <a class="navbar-danger" href="{% url 'blog' %}">Blogs</a>
+                <a class="navbar-success" href="{% url 'buzon' %}">Buzon de entrada</a>
+                <a class="navbar-success" href="{% url 'editarperfil' %}">Editar perfil</a>
                 <img src="{{ imagen }}" alt="">
                 {% if not request.user.is_authenticated %}
+                
                 <a class="btn btn-primary" href="{% url 'login' %}">iniciar sesion</a>
-                <a class="btn btn-primary" href="{% url 'register' %}">Registrate</a>
+                <a class="btn btn-warning" href="{% url 'register' %}">Registrate</a>
                 {% else %}
                 <p>Hola {{ user.username }}</p>
-                <img src="{{ imagen }}" alt="">
-                <a class="btn btn-primary" href="{% url 'logout' %}">cerrar sesion</a>
+                <img src="{{ imagen }}" >
+                <a class="btn btn-info" href="{% url 'logout' %}">cerrar sesion</a>
                 {% endif %}
-                <a class="btn btn-primary" href="{% url 'agregaravatar' %}">Agregar un avatar</a>
+                <a class="btn btn-dark" href="{% url 'agregaravatar' %}">Agregar un avatar</a>
+                <a class="btn btn-warning" href="{% url 'vermas' %}">Acerca de </a>
                 
                 
             </div>
