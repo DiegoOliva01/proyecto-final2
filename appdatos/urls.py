@@ -23,6 +23,7 @@ urlpatterns = [
     path('busquedamensaje/', busquedamensaje, name='busquedamensaje'),
     
     path('buzon/', buzon, name='buzon'),
+    path('postear/', postear, name='postear'),
 
     path('vermas/', vermas, name='vermas'),
 

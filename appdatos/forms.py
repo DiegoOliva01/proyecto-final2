@@ -1,10 +1,15 @@
+from cProfile import label
 from datetime import datetime
 from email.policy import default
+from mimetypes import init
+from ssl import Options
 from django import forms
 from dataclasses import fields
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils import timezone 
+import datetime
+from .models import Msg,Posteo
 
 
 class UserRegisterForm(UserCreationForm):
@@ -37,10 +42,15 @@ class AvatarForm(forms.Form):
     imagen=forms.ImageField(label="imagen")   
 
 
-class FormularioMensage(forms.Form):
-    emisor=forms.CharField(label="Emisor")
-    receptor=forms.CharField(label="Nombre del usuario ")
-    texto=forms.CharField(label="Mensaje")
-    fecha=forms.DateTimeField()
+class FormularioMensage(forms.ModelForm):
+    class Meta:
+        model=Msg
+        fields=["receptor","texto","fecha",]
+        help_texts={k:"" for k in fields}
+
+class Postear(forms.ModelForm):
+    class Meta:
+        model=Posteo
+        fields=["categoria","titulo","estado","imagen","contenido","publicado","pie_pagina",]
+        help_texts={k:"" for k in fields}
     
-                  

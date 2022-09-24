@@ -1,0 +1,25 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> Postear </h1>
+
+
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<form action="{% url 'postear' %}" method="POST"> {% csrf_token %}
+
+<table>
+    {{ form.as_table }}
+</table>
+
+<input type="submit" value="Postear">
+
+</form>
+
+{% endblock %}

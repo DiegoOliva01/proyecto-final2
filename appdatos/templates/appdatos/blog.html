@@ -12,7 +12,8 @@
 {% endblock %} 
 
 {% block contenido_que_cambia %}
-  
+  {{mensaje}}
+  {{imagen}}
 {% for post in posteos %}
     
 
@@ -29,8 +30,9 @@
 <h2>{{post.contenido}}</h2> 
                     
 
-<h2>Publicado el {{post.publicado}},por {{post.autor}}</h2>                            
-                       
+<h2>Publicado el {{post.publicado}},por {{post.autor}}</h2>  
+<h2><img src="{% static 'imagen' %}"></h2>                          
+ <h2>{{ post.pie_pagina}}</h2>                      
        
 {% endfor %}
 

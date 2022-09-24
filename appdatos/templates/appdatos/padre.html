@@ -24,17 +24,20 @@
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
                 
-                <a class="navbar-brand" href="{% url 'inicio' %}">Inicio</a>
-                <a class="navbar-danger" href="{% url 'blog' %}">Blogs</a>
-                <a class="navbar-success" href="{% url 'buzon' %}">Buzon de entrada</a>
-                <a class="navbar-success" href="{% url 'editarperfil' %}">Editar perfil</a>
-                <img src="{{ imagen }}" alt="">
-                {% if not request.user.is_authenticated %}
                 
+                {% if not request.user.is_authenticated %}
+               
                 <a class="btn btn-primary" href="{% url 'login' %}">iniciar sesion</a>
                 <a class="btn btn-warning" href="{% url 'register' %}">Registrate</a>
                 {% else %}
                 <p>Hola {{ user.username }}</p>
+                 <a class="navbar-brand" href="{% url 'inicio' %}">Inicio</a>
+                <a class="navbar-danger" href="{% url 'blog' %}">Blogs</a>
+                <a class="navbar-danger" href="{% url 'postear' %}">Postear</a>
+                <a class="navbar-success" href="{% url 'buzon' %}">Buzon de entrada</a>
+                <a class="navbar-success" href="{% url 'enviar_mensaje' %}">Enviar mensaje</a>
+                <a class="navbar-success" href="{% url 'editarperfil' %}">Editar perfil</a>
+                <img src="{{ imagen }}" alt="">
                 <img src="{{ imagen }}" >
                 <a class="btn btn-info" href="{% url 'logout' %}">cerrar sesion</a>
                 {% endif %}

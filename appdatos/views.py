@@ -1,17 +1,19 @@
+from ast import keyword
 from http.client import HTTPResponse
+from time import timezone
 #from multiprocessing import context
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from appdatos import *
 from appdatos.models import Categoria, Msg, Avatar,Posteo,Categoria,Comentarios
-from appdatos.forms import UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage
+from appdatos.forms import UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage,Postear
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,TemplateView
 from django.contrib.auth.models import User
-
+from django.utils import timezone 
 
 # Create your views here.
 
@@ -23,7 +25,7 @@ def inicio(request):
 
 def blog(request):
     posteos =Posteo.objects.all()
-    return render(request, "appdatos/blog.html", {'posteos':posteos})
+    return render(request, "appdatos/blog.html", {'posteos':posteos,"imagen":imagenposteo(request)})
 
 def categoria(request, categoria_id):
     posteos =Posteo.objects.all()
@@ -119,20 +121,26 @@ def obteneravatar(request):
 def enviar_mensaje(request):
     if request.method=="POST":
        form=FormularioMensage(request.POST)
+      
+       emisor=request.user
+       
+
+      
        if form.is_valid():
+        
         info=form.cleaned_data
-        msg=info.get("mensaje")
-        emi=info.get("emisor")
+        msg=info.get("texto")
+        emi=emisor
         recep=info.get("receptor")
         fecha=info.get("fecha")
-        mensajes=Msg(mensaje=msg,emisor=emi,receptor=recep,fecha=fecha)
+        mensajes=Msg(texto=msg,emisor=emi,receptor=recep,fecha=fecha)
         mensajes.save()
         return render(request,"appdatos/inicio.html", {"mensaje": "mensaje enviado"})
        else:   
            return render(request,"appdatos/inicio.html", {"mensaje": "Error, no se pudo enviar el mensaje"} )    
     else:
         form=FormularioMensage()
-        return render(request,"appdatos/formulariomensaje.html", {"form":form} ) 
+        return render(request,"appdatos/formulariomensaje.html", {"form":form,} ) 
 
 
 def busquedamensaje(request):
@@ -142,9 +150,10 @@ def busquedamensaje(request):
 
 @login_required
 def buzon(request):
-    if request.GET["receptor"]:
-        msg=request.GET["receptor"]
-        mensaje=Msg.objects.filter(receptor=msg)
+    receptor=request.user
+    if receptor==request.user:
+        
+        mensaje=Msg.objects.filter(receptor=receptor)
         if len(mensaje)!=0:
             return render(request, "appdatos/resultadobusqueda.html", {"mensajes":mensaje})
         else:
@@ -152,6 +161,42 @@ def buzon(request):
     else:
         return render(request, "appdatos/busquedamensaje.html", {"mensaje": f"No existe el usuario {Msg.receptor}"})
 
+def postear(request):
+    if request.method=="POST":
+       form=Postear(request.POST)
+      
+       autor=request.user
+       if form.is_valid():
+        
+        info=form.cleaned_data
+        categoria=info.get("categoria")
+        titulo=info.get("titulo")
+        estado=info.get("estado")
+        imagen=info.get("imagen")
+        contenido=info.get("contenido")
+        publicado=info.get("publicado")
+        pie_pagina=info.get("pie_pagina")
+        
+        
+        
+      
+        post=Posteo(autor=autor,categoria=categoria,titulo=titulo,estado=estado,imagen=imagen,contenido=contenido,
+        publicado=publicado,pie_pagina=pie_pagina,slug=titulo)
+        post.save()
+        return render(request,"appdatos/blog.html", {"mensaje": "Se ha publicado su post"})
+       else:   
+           return render(request,"appdatos/inicio.html", {"mensaje": "Error, no se pudo publicar tu post"} )    
+    else:
+        form=Postear()
+        return render(request,"appdatos/formularioposteo.html", {"form":form} ) 
+
+def imagenposteo(request):
+    lista=Posteo.objects.filter(request.imagen)
+    if len(lista)!=0:
+        imagen=lista[0].imagen.url
+    else:
+        imagen=None 
+    return imagen 
 
 
 def vermas(request):
