@@ -12,9 +12,10 @@
 {% endblock %} 
 
 {% block contenido_que_cambia %}
-  {{mensaje}}
+ <h2>{{mensaje}}</h2> 
   {{imagen}}
 {% for post in posteos %}
+<li>
  <h1>Categoria de {{post.categoria}}</h1> 
                         
  <h1>{{post.titulo}}</h1> 
@@ -31,12 +32,16 @@
 
 <p>Publicado el {{post.publicado}},por {{post.autor}}</p>  
 <h2><img src="{% static 'imagen' %}"></h2>                          
- <h2>{{ post.pie_pagina}}</h2>                      
- {% if username == posteo.autor %}
- <a class="navbar-success" href="{% url 'editarpost' %}">Editar post </a>
+ <h2>{{ post.pie_pagina}}</h2>  
+ </li>
  
- 
- 
+ {% if username == autor %}
+ <button>
+  <a class="navbar-success" href="{% url 'editarpost' post.id %}">Editar posteo</a>
+
+  <a class="navbar-success" href="{% url 'eliminarpost' post.id %}">Eliminar posteo</a>
+
+ </button>
  {% endif %}
  
  

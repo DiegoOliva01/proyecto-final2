@@ -10,7 +10,7 @@ urlpatterns = [
     path("",views.inicio,name="inicio"),
     path("blog/",blog,name="blog"),
     path('categoria/<int:categoria_id>/',categoria, name="categoria"),
-    #path("<slug:slug>/",detalle_post,name="detalle_post"),
+    
    
 
     path('login/', login_request, name='login'), 
@@ -24,11 +24,15 @@ urlpatterns = [
     path("enviar_mensaje/",enviar_mensaje,name="enviar_mensaje"),
     path('busquedamensaje/', busquedamensaje, name='busquedamensaje'),
     
-    path("editarpost/", editarpost, name="editarpost"),
+    path("editarpost/<id>", editarpost, name="editarpost"),
+    path('eliminarpost/<id>', eliminarpost, name='eliminarpost'),
 
     path('buzon/', buzon, name='buzon'),
     path('postear/', postear, name='postear'),
 
     path('vermas/', vermas, name='vermas'),
+    
+    path('infousuario/', infousuario, name='infousuario'),
+    path('eliminarperfil/<id>', eliminarperfil, name='eliminarperfil'),
 
 ]

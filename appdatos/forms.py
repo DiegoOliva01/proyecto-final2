@@ -18,7 +18,8 @@ class UserRegisterForm(UserCreationForm):
     password1=forms.CharField(label="contraseña", widget=forms.PasswordInput)
     password2=forms.CharField(label="confirmar contraseña", widget=forms.PasswordInput) 
     last_name=forms.CharField(label=" Apellido")
-    first_name=forms.CharField(label=" Nombre")  
+    first_name=forms.CharField(label=" Nombre") 
+    
     
 
     class Meta:
@@ -57,16 +58,17 @@ class Postear(forms.ModelForm):
     
 class Editarpost(forms.ModelForm):
  
-    categoria=forms.CharField(label="Modificar categoria")
+    
+
     titulo=forms.CharField(label="titulo")
-    estado=forms.CharField(label="confirmar estado")   
-    imagen=forms.ImageField(label="Modificar imagen")
+    estado=forms.CharField(label="estado publicado o borrador")
+    
     contenido=forms.CharField(label="Modificar contenido")  
     publicado=forms.DateField(label="publicado")
     pie_pagina=forms.CharField(label="pie_pagina", )
    
     class Meta:
         model=Posteo
-        fields=["categoria","titulo","estado","imagen","contenido","publicado","pie_pagina","autor"]
+        fields=["titulo","estado","contenido","publicado","pie_pagina","autor"]
         help_texts={k:"" for k in fields}
     

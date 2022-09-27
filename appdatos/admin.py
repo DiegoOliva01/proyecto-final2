@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
 
 #blanky,diego012345
-#blankito,diego012345
+#blankito,diego0123456
 admin.site.register(Avatar)
 
 

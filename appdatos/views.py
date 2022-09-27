@@ -30,7 +30,13 @@ def blog(request):
 def categoria(request, categoria_id):
     posteos =Posteo.objects.all()
     categorias =get_object_or_404(Categoria,id=categoria_id)
-    return render(request, "appdatos/categoria.html", {'categoria':categorias, 'posteos':posteos,})
+    return render(request, "appdatos/inicio.html", {'categoria':categorias, 'posteos':posteos,})
+
+
+
+def vermas(request):
+ return render( request,"appdatos/vermas.html")
+
 
 #def detalle_post(request,slug):
    # post=Posteo.objects.get(slug=slug)
@@ -100,11 +106,11 @@ def agregaravatar(request):
         form=AvatarForm(request.POST,request.FILES)
         if form.is_valid():
             avatarviejo=Avatar.objects.filter(user=request.user)
-            if (len(avatarviejo))>0:
+            if (len(avatarviejo)>0):
                 avatarviejo.delete()
-        avatar=Avatar(user=request.user,imagen=form.cleaned_data["imagen"])   
-        avatar.save()
-        return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente","imagen":obteneravatar(request)})     
+            avatar=Avatar(user=request.user,imagen=form.cleaned_data("imagen"))   
+            avatar.save()
+            return render(request,"appdatos/inicio.html",{"usuario":request.user,"mensaje":"Avatar agregado exitosamente","imagen":obteneravatar(request)})     
 
     else:
         form=AvatarForm()
@@ -216,17 +222,17 @@ def imagenposteo(request):
     return imagen 
 
 
-def editarpost(request):
-    posteo=Posteo.objects.get()
+def editarpost(request,id):
+    posteo=Posteo.objects.get(id=id)
     if request.method=="POST":
        form=Editarpost(request.POST)
        if form.is_valid():
          info=form.cleaned_data
          posteo.autor=info["autor"]
-         posteo.categoria=info["categoria"]
+         
          posteo.titulo=info["titulo"]
          posteo.estado=info["estado"]
-         posteo.imagen=info["imagen"]
+        
          posteo.contenido=info["contenido"]
          posteo.publicado=info["publicado"]
          posteo.pie_pagina=info["pie_pagina"]
@@ -234,14 +240,39 @@ def editarpost(request):
         
          return render(request,"appdatos/blog.html",{"mensaje" :"tu posteo a sido modificado con exito"})
     else:
-        form=Editarpost(initial={"autor":posteo.autor, "categoria":posteo.categoria, "titulo":posteo.titulo, "estado":posteo.estado,
-         "imagen":posteo.imagen, "contenido":posteo.contenido, "publicado":posteo.publicado, "pie_pagina":posteo.pie_pagina
+        form=Editarpost(initial={"autor":posteo.autor,  "titulo":posteo.titulo, "estado":posteo.estado,
+         "contenido":posteo.contenido, "publicado":posteo.publicado, "pie_pagina":posteo.pie_pagina
         })     
-    return render(request,"appdatos/editarpost.html",{"formulario":form ,"usuario":posteo.autor})
+    return render(request,"appdatos/editarpost.html",{"formulario":form ,"usuario":posteo.autor,"id":posteo.id})
 
+def eliminarpost(request, id):
+    posteo=Posteo.objects.get(id=id)
+    posteo.delete()
+    post=Posteo.objects.all()
+    return render(request, "appdatos/blog.html", {"posteos":post})
 
-def vermas(request):
- return render( request,"appdatos/vermas.html")
+def infousuario(request):
+   usuario=request.user     
+   if request.method=="POST":
+       form=User(request.POST,instance=usuario)
+       if form.is_valid():
+         usuario.first_name=form.cleaned_data["first_name"]
+         usuario.last_name=form.cleaned_data["last_name"]
+         usuario.email=form.cleaned_data["email"]
+         usuario.password1=form.cleaned_data["password1"]
+         usuario.password2=form.cleaned_data["password2"]
+        
+         usuario.save()
+         return render(request,"appdatos/inicio.html",{"mensaje" :f"perfi de {usuario} "})
+   else: 
+    return render(request,"appdatos/infousuario.html",{"usuario":usuario})
+
+def eliminarperfil(request, id):
+    usuario=User.objects.get(id=id)
+    usuario.delete()
+   
+    return render(request, "appdatos/inicio.html")
+
 
 
 

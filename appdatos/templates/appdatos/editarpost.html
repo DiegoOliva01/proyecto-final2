@@ -12,8 +12,8 @@
 
 <h1>Edicion del post </h1>
 <h1>{{ mensaje }}</h1>
-{% if request.user == posteo.autor %}
-<form action="{% url 'editarpost' %}" method="POST"> {% csrf_token %}
+
+<form action="{% url 'editarpost' id %}" method="POST"> {% csrf_token %}
 
 
     {{ formulario.as_p}}
@@ -24,8 +24,7 @@
 
 
 </form>
-{% else %}
-<h2>No se puede modificar este post porque tu no eres su autor</h2>
-{% endif %}
+
+
 
 {% endblock %}

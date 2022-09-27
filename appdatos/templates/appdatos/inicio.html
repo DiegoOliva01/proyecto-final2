@@ -15,4 +15,11 @@
 
  <h2> {{ mensaje }} </h2>
 
+ {% for categorias in posteos.categoria.all %}
+ <a href="{% url 'categoria' categorias.id %}" class="link">
+     {{categoria.nombre}}</a>
+   
+{% endfor %}
+
+
 {% endblock %} 
