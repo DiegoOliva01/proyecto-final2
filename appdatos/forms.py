@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone 
 import datetime
 from .models import Msg,Posteo
+from django.db.models import TextField 
 
 
 class UserRegisterForm(UserCreationForm):
@@ -52,5 +53,20 @@ class Postear(forms.ModelForm):
     class Meta:
         model=Posteo
         fields=["categoria","titulo","estado","imagen","contenido","publicado","pie_pagina",]
+        help_texts={k:"" for k in fields}
+    
+class Editarpost(forms.ModelForm):
+ 
+    categoria=forms.CharField(label="Modificar categoria")
+    titulo=forms.CharField(label="titulo")
+    estado=forms.CharField(label="confirmar estado")   
+    imagen=forms.ImageField(label="Modificar imagen")
+    contenido=forms.CharField(label="Modificar contenido")  
+    publicado=forms.DateField(label="publicado")
+    pie_pagina=forms.CharField(label="pie_pagina", )
+   
+    class Meta:
+        model=Posteo
+        fields=["categoria","titulo","estado","imagen","contenido","publicado","pie_pagina","autor"]
         help_texts={k:"" for k in fields}
     

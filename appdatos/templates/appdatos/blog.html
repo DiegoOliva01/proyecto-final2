@@ -5,7 +5,7 @@
 {% block titulo_de_la_pagina %}
 
 <h1 class ="mb-5">Pagina de inicio del blog</h1>
-{{categoria}}
+
 
 
 
@@ -15,10 +15,9 @@
   {{mensaje}}
   {{imagen}}
 {% for post in posteos %}
-    
-
+ <h1>Categoria de {{post.categoria}}</h1> 
                         
-<h1>{{post.titulo}}</h1> 
+ <h1>{{post.titulo}}</h1> 
 
 <form method = "POST" enctype="multipart/form-data">  {% csrf_token %} 
    
@@ -30,10 +29,17 @@
 <h2>{{post.contenido}}</h2> 
                     
 
-<h2>Publicado el {{post.publicado}},por {{post.autor}}</h2>  
+<p>Publicado el {{post.publicado}},por {{post.autor}}</p>  
 <h2><img src="{% static 'imagen' %}"></h2>                          
  <h2>{{ post.pie_pagina}}</h2>                      
-       
+ {% if username == posteo.autor %}
+ <a class="navbar-success" href="{% url 'editarpost' %}">Editar post </a>
+ 
+ 
+ 
+ {% endif %}
+ 
+ 
 {% endfor %}
 
 

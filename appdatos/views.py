@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from appdatos import *
 from appdatos.models import Categoria, Msg, Avatar,Posteo,Categoria,Comentarios
-from appdatos.forms import UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage,Postear
+from appdatos.forms import Editarpost, UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage,Postear
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,7 +30,7 @@ def blog(request):
 def categoria(request, categoria_id):
     posteos =Posteo.objects.all()
     categorias =get_object_or_404(Categoria,id=categoria_id)
-    return render(request, "appdatos/categoria.html", {'categoria':categorias, 'posteos':posteos})
+    return render(request, "appdatos/categoria.html", {'categoria':categorias, 'posteos':posteos,})
 
 #def detalle_post(request,slug):
    # post=Posteo.objects.get(slug=slug)
@@ -190,13 +190,54 @@ def postear(request):
         form=Postear()
         return render(request,"appdatos/formularioposteo.html", {"form":form} ) 
 
+
+
+def agregarimagen(request):
+    if request.method=="POST":
+        form=Postear(request.POST,request.FILES)
+        if form.is_valid():
+            imagenvieja=Posteo.objects.filter(imagen=Posteo.imagen)
+            if (len(imagenvieja))>0:
+                imagenvieja.delete()
+        nuevaimagen=Posteo(imagen=Posteo.imagen)   
+        nuevaimagen.save()
+        return render(request,"appdatos/inicio.html",{"mensaje":"Imagen agregado exitosamente","imagen":imagenposteo(request)})     
+
+    else:
+        form=AvatarForm()
+    return render(request,"appdatos/agregarimagen.html",{"form":form ,"imagen":imagenposteo(request)})     
+
 def imagenposteo(request):
-    lista=Posteo.objects.filter(request.imagen)
+    lista=Posteo.objects.filter(imagen=Posteo.imagen)
     if len(lista)!=0:
         imagen=lista[0].imagen.url
     else:
         imagen=None 
     return imagen 
+
+
+def editarpost(request):
+    posteo=Posteo.objects.get()
+    if request.method=="POST":
+       form=Editarpost(request.POST)
+       if form.is_valid():
+         info=form.cleaned_data
+         posteo.autor=info["autor"]
+         posteo.categoria=info["categoria"]
+         posteo.titulo=info["titulo"]
+         posteo.estado=info["estado"]
+         posteo.imagen=info["imagen"]
+         posteo.contenido=info["contenido"]
+         posteo.publicado=info["publicado"]
+         posteo.pie_pagina=info["pie_pagina"]
+         posteo.save()
+        
+         return render(request,"appdatos/blog.html",{"mensaje" :"tu posteo a sido modificado con exito"})
+    else:
+        form=Editarpost(initial={"autor":posteo.autor, "categoria":posteo.categoria, "titulo":posteo.titulo, "estado":posteo.estado,
+         "imagen":posteo.imagen, "contenido":posteo.contenido, "publicado":posteo.publicado, "pie_pagina":posteo.pie_pagina
+        })     
+    return render(request,"appdatos/editarpost.html",{"formulario":form ,"usuario":posteo.autor})
 
 
 def vermas(request):

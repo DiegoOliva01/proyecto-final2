@@ -1,0 +1,27 @@
+{% extends "appdatos/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_la_pagina %}
+
+<h1 class ="mb-5"> Agregando avatar de {{ usuario }} </h1>
+
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+<h1>Agregar imagen al posteo</h1>
+
+
+<form action="{% url 'agregarimagen' %}" method="POST" enctype="multipart/form-data">  {% csrf_token %}
+
+
+    {{ form.as_p }}
+    <button type="submit"> Agregar imagen</button>
+
+
+
+
+</form>
+
+{% endblock %}

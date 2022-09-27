@@ -18,10 +18,14 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(template_name="appdatos/logout.html"), name="logout"),
     path("editarperfil/", views.editarperfil, name="editarperfil"),
     path("agregaravatar/", agregaravatar, name="agregaravatar"), 
+
+    path("agregarimagen/", agregarimagen, name="agregarimagen"),
     
     path("enviar_mensaje/",enviar_mensaje,name="enviar_mensaje"),
     path('busquedamensaje/', busquedamensaje, name='busquedamensaje'),
     
+    path("editarpost/", editarpost, name="editarpost"),
+
     path('buzon/', buzon, name='buzon'),
     path('postear/', postear, name='postear'),
 
