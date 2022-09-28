@@ -6,7 +6,8 @@ from optparse import Option
 from re import U
 from ssl import Options
 from tkinter import CASCADE
-from django.db import models
+from django.db import models 
+
 from django.contrib.auth.models import User
 from django.utils import timezone 
 
@@ -43,7 +44,7 @@ class Posteo(models.Model):
 
     Options=(("borrador","Borrador"),("publicado","Publicado"),) #aqui creo las opciones las cuales declare en estado, choises
 
-    categoria=models.ForeignKey(Categoria,on_delete=models.PROTECT,default=1) #el protect me permite que si se borra una categoria no se eliminen los posteos que encuentren en esa categoria
+    categoria=models.ForeignKey(Categoria,on_delete=models.PROTECT) #el protect me permite que si se borra una categoria no se eliminen los posteos que encuentren en esa categoria
     titulo=models.CharField(max_length=200)
     estado=models.CharField(max_length=200,choices=Options,default="borrador")#el choise me permite elegir entre las opciones que le indique
     autor=models.ForeignKey(User,on_delete=models.CASCADE,related_name="blog_posts")
@@ -62,17 +63,5 @@ class Posteo(models.Model):
     def __str__(self):
         return self.titulo
 
-class Comentarios(models.Model):
-    posteo=models.ForeignKey(Posteo,on_delete=models.CASCADE,related_name="comentario")
-    nombre=models.CharField(max_length=20)
-    email=models.EmailField()
-    contenido=models.TextField()
-    publicado=models.DateTimeField(auto_now_add=True)
-    estado=models.BooleanField(default=True) #si esta publicado o no 
 
-    class Meta:
-        ordering=("-publicado",)
-                                                                             
-    def __str__(self):
-        return (f"Comentario de {self.nombre}")
 

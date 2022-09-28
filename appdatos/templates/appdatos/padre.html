@@ -29,6 +29,7 @@
                
                 <a class="btn btn-primary" href="{% url 'login' %}">iniciar sesion</a>
                 <a class="btn btn-warning" href="{% url 'register' %}">Registrate</a>
+                <a class="navbar-brand" href="{% url 'inicio' %}">Inicio</a>
                 {% else %}
                 <p>Hola {{ user.username }}</p>
                  <img src="{{ imagen }}" alt="">

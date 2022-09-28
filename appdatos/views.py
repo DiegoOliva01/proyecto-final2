@@ -5,13 +5,13 @@ from time import timezone
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from appdatos import *
-from appdatos.models import Categoria, Msg, Avatar,Posteo,Categoria,Comentarios
+from appdatos.models import Msg, Avatar,Posteo,Categoria
 from appdatos.forms import Editarpost, UserRegisterForm,UserEditForm,AvatarForm,FormularioMensage,Postear
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,TemplateView
+
 from django.contrib.auth.models import User
 from django.utils import timezone 
 
@@ -27,10 +27,7 @@ def blog(request):
     posteos =Posteo.objects.all()
     return render(request, "appdatos/blog.html", {'posteos':posteos,"imagen":imagenposteo(request)})
 
-def categoria(request, categoria_id):
-    posteos =Posteo.objects.all()
-    categorias =get_object_or_404(Categoria,id=categoria_id)
-    return render(request, "appdatos/inicio.html", {'categoria':categorias, 'posteos':posteos,})
+
 
 
 
@@ -163,7 +160,7 @@ def buzon(request):
         if len(mensaje)!=0:
             return render(request, "appdatos/resultadobusqueda.html", {"mensajes":mensaje})
         else:
-            return render(request, "appdatos/resultadobusqueda.html", {"mensajes": "No tiene mensajes en su buzon"})
+            return render(request, "appdatos/resultadobusqueda.html", {"aviso":"No tiene mensajes en su buzon"})
     else:
         return render(request, "appdatos/busquedamensaje.html", {"mensaje": f"No existe el usuario {Msg.receptor}"})
 
@@ -223,6 +220,7 @@ def imagenposteo(request):
 
 
 def editarpost(request,id):
+   
     posteo=Posteo.objects.get(id=id)
     if request.method=="POST":
        form=Editarpost(request.POST)
@@ -244,6 +242,10 @@ def editarpost(request,id):
          "contenido":posteo.contenido, "publicado":posteo.publicado, "pie_pagina":posteo.pie_pagina
         })     
     return render(request,"appdatos/editarpost.html",{"formulario":form ,"usuario":posteo.autor,"id":posteo.id})
+   
+
+
+
 
 def eliminarpost(request, id):
     posteo=Posteo.objects.get(id=id)

@@ -20,21 +20,26 @@
 
 
 
- <h1>Resultados busqueda</h1>
+ <h1>Mensajes</h1>
   
- 
+
+  {% if mensajes %}
   
    {% for msg in mensajes %}
-  
-  <h2>Enviado por:{{ msg.emisor }}</h2>
-  <h2>Para:{{ msg.receptor }}</h2>
-  <h2>Mensaje:{{ msg.texto }}</h2>
-  <h2>Fecha de emision:{{ msg.fecha }}</h2>
+   
+   <h2>Enviado por:{{ msg.emisor }}</h2>
+   <h2>Para:{{ msg.receptor }}</h2>
+   <h2>Mensaje:{{ msg.texto }}</h2>
+   <h2>Fecha de emision:{{ msg.fecha }}</h2>
    -----------------------------------------
+  {% endfor %}
+   
+   {% else %}
+   {{aviso}}
+ 
+   {% endif %}
+   
   
- 
-   {% endfor %}
- 
 
     
 
